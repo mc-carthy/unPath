@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
-    public static readonly Vector2[] allDirections =
-    {
-        new Vector2(0f, 1f),
-        new Vector2(1f, 0f),
-        new Vector2(0f, -1f),
-        new Vector2(-1f, 0f),
-        new Vector2(1f, 1f),
-        new Vector2(1f, -1f),
-        new Vector2(-1f, 1f),
-        new Vector2(-1f, -1f),
-    };
-
     public Node[,] nodes;
     public List<Node> walls = new List<Node>();
 
     private int[,] mapData;
-    private int width, height;
+    private int width, height;    
+    
+    public static readonly Vector2[] allDirections =
+    {
+        new Vector2(0f,1f),
+        new Vector2(1f,1f),
+        new Vector2(1f,0f),
+        new Vector2(1f,-1f),
+        new Vector2(0f,-1f),
+        new Vector2(-1f,-1f),
+        new Vector2(-1f,0f),
+        new Vector2(-1f,1f)
+    };
 
     public void Init(int[,] mapData)
     {
@@ -37,7 +37,7 @@ public class Graph : MonoBehaviour
                 Node newNode = new Node(x, y, type);
                 nodes[x, y] = newNode;
 
-                newNode.position = new Vector3(x, 0, y);
+                newNode.position = new Vector3(x, y, 0);
 
                 if (type == NodeType.Blocked)
                 {
@@ -61,7 +61,7 @@ public class Graph : MonoBehaviour
 
     public bool IsWithinBounds(int x, int y)
     {
-        return (x >= 0 && x < width && y >= 0 && x < height);
+        return (x >= 0 && x < width && y >= 0 && y < height);
     }
 
     private List<Node> GetNeighbours(int x, int y, Node[,] nodeArray, Vector2[] directions)
@@ -71,12 +71,12 @@ public class Graph : MonoBehaviour
         foreach(Vector2 dir in directions)
         {
             int newX = x + (int)dir.x;
-            int newY = x + (int)dir.y;
+            int newY = y + (int)dir.y;
 
             if (
-                IsWithinBounds(newX, newY) && 
-                nodeArray[newX, newY] != null && 
-                nodeArray[newX, newY].nodeType != NodeType.Blocked
+                IsWithinBounds(newX,newY) && 
+                nodeArray[newX,newY] != null &&
+                nodeArray[newX,newY].nodeType != NodeType.Blocked
             )
             {
                 neighbourNodes.Add(nodeArray[newX, newY]);
