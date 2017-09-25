@@ -3,6 +3,18 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
+    public static readonly Vector2[] allDirections =
+    {
+        new Vector2(0f, 1f),
+        new Vector2(1f, 0f),
+        new Vector2(0f, -1f),
+        new Vector2(-1f, 0f),
+        new Vector2(1f, 1f),
+        new Vector2(1f, -1f),
+        new Vector2(-1f, 1f),
+        new Vector2(-1f, -1f),
+    };
+
     public Node[,] nodes;
     public List<Node> walls = new List<Node>();
 
@@ -34,5 +46,48 @@ public class Graph : MonoBehaviour
 
             }
         }
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (nodes[x, y].nodeType != NodeType.Blocked)
+                {
+                    nodes[x, y].neighbours = GetNeighbours(x, y);
+                }
+            }
+        }
+    }
+
+    public bool IsWithinBounds(int x, int y)
+    {
+        return (x >= 0 && x < width && y >= 0 && x < height);
+    }
+
+    private List<Node> GetNeighbours(int x, int y, Node[,] nodeArray, Vector2[] directions)
+    {
+        List<Node> neighbourNodes = new List<Node>();
+
+        foreach(Vector2 dir in directions)
+        {
+            int newX = x + (int)dir.x;
+            int newY = x + (int)dir.y;
+
+            if (
+                IsWithinBounds(newX, newY) && 
+                nodeArray[newX, newY] != null && 
+                nodeArray[newX, newY].nodeType != NodeType.Blocked
+            )
+            {
+                neighbourNodes.Add(nodeArray[newX, newY]);
+            }
+        }
+
+        return neighbourNodes;
+    }
+
+    private List<Node> GetNeighbours(int x, int y)
+    {
+        return GetNeighbours(x, y, nodes, allDirections);
     }
 }
