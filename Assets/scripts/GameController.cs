@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     public Graph graph;
     public Pathfinder pathfinder;
     
+    public float timestep = 0.05f;
+
     private int startX = 0;
     private int startY = 3;
     private int goalX = 39;
@@ -36,6 +38,7 @@ public class GameController : MonoBehaviour
                 Node startNode = graph.nodes[startX, startY];
                 Node goalNode = graph.nodes[goalX, goalY];
                 pathfinder.Init(graph, graphView, startNode, goalNode);
+                StartCoroutine(pathfinder.SearchRoutine(timestep));
             }
         }
     }

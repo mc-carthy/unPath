@@ -42,4 +42,19 @@ public class GraphView : MonoBehaviour {
             }
         }
     }
+
+    public void ColourNodes(List<Node> nodes, Color colour)
+    {
+        foreach (Node n in nodes)
+        {
+            if (n != null)
+            {
+                NodeView nodeView = nodeViews[n.xIndex, n.yIndex];
+                if (nodeView != null)
+                {
+                    nodeView.ColourNode(colour);
+                }
+            }
+        }
+    }
 }
