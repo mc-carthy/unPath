@@ -1,37 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapData : MonoBehaviour
 {
-    public int width = 10;
-    public int height = 5;
+    private int width = 10;
+    private int height = 5;
+
+    public TextAsset textAsset;
+
+    public List<string> GetTextFromFile(TextAsset asset)
+    {
+        List<string> lines = new List<string>();
+
+        if (asset != null)
+        {
+            string textData = asset.text;
+            char[] delimiters = { '\n', '\r' };
+            lines = textData.Split(delimiters).ToList();
+            
+            // We reverse the list as we read text in from the top down,
+            // but build the map from the bottom up
+            lines.Reverse();
+        }
+        else
+        {
+            Debug.LogWarning("MAPDATA - GetTextFromFile Error: invalid TextAsset!");
+        }
+
+        return lines;
+    }
+
+    public List<string> GetTextFromFile()
+    {
+        return GetTextFromFile(textAsset);
+    }
+
+    public void SetDimensions(List<string> textLines)
+    {
+        height = textLines.Count;
+
+        foreach (string line in textLines)
+        {
+            if (line.Length > width)
+            {
+                width = line.Length;
+            }
+        }
+    }
 
     public int[,] MakeMap()
     {
+        List<string> lines = new List<string>();
+
+        lines = GetTextFromFile();
+        SetDimensions(lines);
+
         int[,] map = new int[width, height];
         
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                map[x, y] = 0;
+                if(lines[y].Length > x)
+                {
+                    map[x, y] = (int)Char.GetNumericValue(lines[y][x]);
+                }
+                else
+                {
+                    map[x, y] = 0;
+                }
             }
         }
-
-        map[1, 0] = 1;
-        map[1, 1] = 1;
-        map[1, 2] = 1;
-        map[3, 2] = 1;
-		map[3, 3] = 1;
-		map[3, 4] = 1;
-		map[4, 2] = 1;
-		map[5, 1] = 1;
-		map[5, 2] = 1;
-		map[6, 2] = 1;
-		map[6, 3] = 1;
-		map[8, 0] = 1;
-		map[8, 1] = 1;
-		map[8, 2] = 1;
-		map[8, 4] = 1;
 
 		return map;
     }
