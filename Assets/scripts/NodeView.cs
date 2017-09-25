@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class NodeView : MonoBehaviour {
 
-    public GameObject tile;
-
     [Range(0, 0.5f)]
     public float borderSize = 0.15f;
+
+    public GameObject tile;
+    public GameObject arrow;
+
+    private Node node;
 
     public void Init(Node node)
     {
@@ -16,6 +19,8 @@ public class NodeView : MonoBehaviour {
             gameObject.name = "Node (" + node.xIndex + "," + node.yIndex + ")";
             gameObject.transform.position = node.position;
             tile.transform.localScale = Vector3.one * (1 - borderSize);
+            this.node = node;
+            EnableObject(arrow, false);
         }
     }
 
@@ -24,12 +29,36 @@ public class NodeView : MonoBehaviour {
         ColourNode(colour, tile);
     }
 
+    public void ShowArrow()
+    {
+        if (
+            node != null && 
+            node.previous != null &&
+            arrow != null
+        )
+        {
+            EnableObject(arrow, true);
+
+            Vector3 dirToPrevious = (node.previous.position - node.position).normalized;
+            float rotZ = Mathf.Atan2(dirToPrevious.y, dirToPrevious.x) * Mathf.Rad2Deg;
+            arrow.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ - 90f));
+        }
+    }
+
     private void ColourNode(Color colour, GameObject go)
     {
         if (go != null)
         {
             Renderer goRen = go.GetComponent<Renderer>();
             goRen.material.color = colour;
+        }
+    }
+
+    private void EnableObject(GameObject go, bool state)
+    {
+        if (go != null)
+        {
+            go.SetActive(state);
         }
     }
 }

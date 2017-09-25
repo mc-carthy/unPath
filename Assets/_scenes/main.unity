@@ -236,6 +236,7 @@ MonoBehaviour:
   mapData: {fileID: 556353191}
   graph: {fileID: 1285068563}
   pathfinder: {fileID: 1401350815}
+  timestep: 0.05
 --- !u!4 &1328871107
 Transform:
   m_ObjectHideFlags: 0
@@ -281,6 +282,7 @@ MonoBehaviour:
   frontierColour: {r: 1, g: 0, b: 1, a: 1}
   exploredColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   pathColour: {r: 0, g: 1, b: 1, a: 1}
+  isComplete: 0
 --- !u!4 &1401350816
 Transform:
   m_ObjectHideFlags: 0
