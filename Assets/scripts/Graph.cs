@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
+    public int Width { get { return width; }}
+    private int width;
+    public int Height { get { return height; }}
+    private int height;
+
     public Node[,] nodes;
     public List<Node> walls = new List<Node>();
 
     private int[,] mapData;
-    private int width, height;    
     
     public static readonly Vector2[] allDirections =
     {
