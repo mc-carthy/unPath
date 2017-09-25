@@ -83,6 +83,11 @@ public class Pathfinder : MonoBehaviour {
             graphView.ColourNodes(exploredNodes, exploredColour);
         }
 
+        if (pathNodes != null && pathNodes.Count > 0)
+        {
+            graphView.ColourNodes(pathNodes, pathColour);
+        }
+
         NodeView startNodeView = graphView.nodeViews[start.xIndex, start.yIndex];
         if (startNodeView != null)
         {
@@ -113,6 +118,11 @@ public class Pathfinder : MonoBehaviour {
                 }
 
                 ExpandFrontier(currentNode);
+                if (frontierNodes.Contains(goalNode))
+                {
+                    pathNodes = GetPathNodes(goalNode);
+                }
+
                 ShowColours();
 
                 if (graphView != null)
@@ -145,5 +155,27 @@ public class Pathfinder : MonoBehaviour {
                 }
             }
         }
+    }
+
+    private List<Node> GetPathNodes(Node endNode)
+    {
+        List<Node> path = new List<Node>();
+
+        if (endNode == null)
+        {
+            return path;
+        }
+
+        path.Add(endNode);
+
+        Node currentNode = endNode.previous;
+
+        while (currentNode != null)
+        {
+            path.Insert(0, currentNode);
+            currentNode = currentNode.previous;
+        }
+
+        return path;
     }
 }
