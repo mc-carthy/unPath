@@ -36,14 +36,10 @@ public class MapData : MonoBehaviour
             string textData = asset.text;
             char[] delimiters = { '\n', '\r' };
             lines = textData.Split(delimiters).ToList();
-            
+
             // We reverse the list as we read text in from the top down,
             // but build the map from the bottom up
             lines.Reverse();
-        }
-        else
-        {
-            Debug.LogWarning("MAPDATA - GetTextFromFile Error: invalid TextAsset!");
         }
 
         return lines;
@@ -71,25 +67,28 @@ public class MapData : MonoBehaviour
     {
         List<string> lines = new List<string>();
 
-        for (int y = 0; y < texture.height; y++)
+        if (texture != null)
         {
-            string newLine = "";
-            for (int x = 0; x < texture.width; x++)
+            for (int y = 0; y < texture.height; y++)
             {
-                if (texture.GetPixel(x, y) == Color.black)
+                string newLine = "";
+                for (int x = 0; x < texture.width; x++)
                 {
-                    newLine += "1";
-                } 
-                else if (texture.GetPixel(x, y) == Color.white)
-                {
-                    newLine += "0";
+                    if (texture.GetPixel(x, y) == Color.black)
+                    {
+                        newLine += "1";
+                    }
+                    else if (texture.GetPixel(x, y) == Color.white)
+                    {
+                        newLine += "0";
+                    }
+                    else
+                    {
+                        newLine += " ";
+                    }
                 }
-                else
-                {
-                    newLine += " ";
-                }
+                lines.Add(newLine);
             }
-            lines.Add(newLine);
         }
 
         return lines;
@@ -116,12 +115,12 @@ public class MapData : MonoBehaviour
         SetDimensions(lines);
 
         int[,] map = new int[width, height];
-        
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                if(lines[y].Length > x)
+                if (lines[y].Length > x)
                 {
                     map[x, y] = (int)Char.GetNumericValue(lines[y][x]);
                 }
@@ -132,6 +131,6 @@ public class MapData : MonoBehaviour
             }
         }
 
-		return map;
+        return map;
     }
 }
