@@ -29,7 +29,7 @@ public class NodeView : MonoBehaviour {
         ColourNode(colour, tile);
     }
 
-    public void ShowArrow()
+    public void ShowArrow(Color colour)
     {
         if (
             node != null && 
@@ -42,6 +42,15 @@ public class NodeView : MonoBehaviour {
             Vector3 dirToPrevious = (node.previous.position - node.position).normalized;
             float rotZ = Mathf.Atan2(dirToPrevious.y, dirToPrevious.x) * Mathf.Rad2Deg;
             arrow.transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ - 90f));
+
+            Renderer[] renderers = arrow.GetComponentsInChildren<Renderer>();
+            if (renderers.Length > 0)
+            {
+                foreach (Renderer ren in renderers)
+                {
+                    ren.material.color = colour;
+                }
+            }
         }
     }
 

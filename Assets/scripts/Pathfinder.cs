@@ -18,6 +18,8 @@ public class Pathfinder : MonoBehaviour {
     public Color frontierColour = Color.magenta;
     public Color exploredColour = Color.grey;
     public Color pathColour = Color.cyan;
+    public Color arrowColour = new Color(0.85f, 0.85f, 0.85f, 1f);
+    public Color highlightColour = new Color(1f, 1f, 0.5f, 1f);
 
     public bool isComplete = false;
     private int iterations = 0;
@@ -127,7 +129,12 @@ public class Pathfinder : MonoBehaviour {
 
                 if (graphView != null)
                 {
-                    graphView.ShowNodeArrows(frontierNodes.ToList());
+                    graphView.ShowNodeArrows(frontierNodes.ToList(), arrowColour);
+                    
+                    if (frontierNodes.Contains(goalNode))
+                    {
+                        graphView.ShowNodeArrows(pathNodes, highlightColour);
+                    }
                 }
 
                 yield return new WaitForSeconds(timestep);
