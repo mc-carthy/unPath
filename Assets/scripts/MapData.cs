@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapData : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class MapData : MonoBehaviour
     private int height = 5;
 
     public TextAsset textAsset;
+    public string resourcePath = "Mapdata";
 
     public List<string> GetTextFromFile(TextAsset asset)
     {
@@ -34,6 +36,11 @@ public class MapData : MonoBehaviour
 
     public List<string> GetTextFromFile()
     {
+        if (textAsset == null)
+        {
+            string levelName = SceneManager.GetActiveScene().name;
+            textAsset = Resources.Load(resourcePath + "/" + levelName) as TextAsset;
+        }
         return GetTextFromFile(textAsset);
     }
 
