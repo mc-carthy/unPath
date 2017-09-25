@@ -6,6 +6,12 @@ public class GameController : MonoBehaviour
 {
     public MapData mapData;
     public Graph graph;
+    public Pathfinder pathfinder;
+    
+    private int startX = 0;
+    private int startY = 3;
+    private int goalX = 39;
+    private int goalY = 1;
 
     private void Start()
     {
@@ -19,6 +25,17 @@ public class GameController : MonoBehaviour
             if (graphView != null)
             {
                 graphView.Init(graph);
+            }
+
+            if (
+                graph.IsWithinBounds(startX, startY) && 
+                graph.IsWithinBounds(goalX, goalY) &&
+                pathfinder != null
+            )
+            {
+                Node startNode = graph.nodes[startX, startY];
+                Node goalNode = graph.nodes[goalX, goalY];
+                pathfinder.Init(graph, graphView, startNode, goalNode);
             }
         }
     }
