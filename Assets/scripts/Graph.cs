@@ -94,4 +94,18 @@ public class Graph : MonoBehaviour
     {
         return GetNeighbours(x, y, nodes, allDirections);
     }
+
+    public float GetNodeDistance(Node start, Node end)
+    {
+        int dx = Mathf.Abs(start.xIndex - end.xIndex);
+        int dy = Mathf.Abs(start.yIndex - end.yIndex);
+
+        int min = Mathf.Min(dx, dy);
+        int max = Mathf.Max(dx, dy);
+
+        int diagSteps = min;
+        int straightSteps = max - min;
+
+        return (1.4f * diagSteps) + straightSteps;
+    }
 }

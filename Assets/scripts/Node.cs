@@ -17,6 +17,7 @@ public class Node
     public Vector3 position;
 
     public List<Node> neighbours = new List<Node>();
+    public float distanceTravelled = Mathf.Infinity;
     public Node previous = null;
 
     public Node(int xIndex, int yIndex, NodeType nodeType)
