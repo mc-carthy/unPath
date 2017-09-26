@@ -10,10 +10,10 @@ public class GameController : MonoBehaviour
     
     public float timestep = 0.05f;
 
-    private int startX = 0;
-    private int startY = 3;
-    private int goalX = 39;
-    private int goalY = 1;
+    public int startX = 0;
+    public int startY = 3;
+    public int goalX = 39;
+    public int goalY = 1;
 
     private void Start()
     {
