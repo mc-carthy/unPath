@@ -167,6 +167,7 @@ public class Pathfinder : MonoBehaviour {
         }
         ShowDiagnostics();
         Debug.Log("PATHFINDER - SearchRoutine: Completed in " + (Time.time - timeStart).ToString() + " seconds.");
+        Debug.Log("PATHFINDER mode: " + mode.ToString() + ". Path length: " + goalNode.distanceTravelled.ToString() + " units");
     }
 
     private void ShowDiagnostics()
@@ -201,6 +202,10 @@ public class Pathfinder : MonoBehaviour {
                     !frontierNodes.Contains(node.neighbours[i])
                 )
                 {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTravelled = distanceToNeighbor + node.distanceTravelled;
+                    node.neighbours[i].distanceTravelled = newDistanceTravelled;
+
                     node.neighbours[i].previous = node;
                     frontierNodes.Enqueue(node.neighbours[i]);
                 }
