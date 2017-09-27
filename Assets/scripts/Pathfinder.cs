@@ -32,7 +32,8 @@ public class Pathfinder : MonoBehaviour {
     public enum Mode
     {
         BreadthFirst = 0,
-        Dijkstra = 1
+        Dijkstra = 1,
+        GreedyBestFirst = 2
     }
 
     public Mode mode = Mode.BreadthFirst;
@@ -143,6 +144,10 @@ public class Pathfinder : MonoBehaviour {
                 {
                     ExpandFrontierDijkstra(currentNode);
                 }
+                else if (mode == Mode.GreedyBestFirst)
+                {
+                    ExpandFrontierGreedyBestFirst(currentNode);
+                }
 
                 if (frontierNodes.Contains(goalNode))
                 {
@@ -211,6 +216,34 @@ public class Pathfinder : MonoBehaviour {
                     // This is a hack to make the priority queue behave like a
                     // regular queue in terms of FIFO
                     node.neighbours[i].priority = exploredNodes.Count;
+                    
+                    frontierNodes.Enqueue(node.neighbours[i]);
+                }
+            }
+        }
+    }
+
+    private void ExpandFrontierGreedyBestFirst(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (
+                    !exploredNodes.Contains(node.neighbours[i]) && 
+                    !frontierNodes.Contains(node.neighbours[i])
+                )
+                {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTravelled = distanceToNeighbor + node.distanceTravelled + (int)node.nodeType;
+                    node.neighbours[i].distanceTravelled = newDistanceTravelled;
+
+                    node.neighbours[i].previous = node;
+
+                    if (graph != null)
+                    {
+                        node.neighbours[i].priority = (int)graph.GetManhattanDistance(node.neighbours[i], goalNode);
+                    }
                     
                     frontierNodes.Enqueue(node.neighbours[i]);
                 }
