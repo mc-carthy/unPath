@@ -9,7 +9,7 @@ public class Pathfinder : MonoBehaviour {
     private Graph graph;
     private GraphView graphView;
 
-    private Queue<Node> frontierNodes;
+    private PriorityQueue<Node> frontierNodes;
     private List<Node> exploredNodes;
     private List<Node> pathNodes;
 
@@ -58,7 +58,7 @@ public class Pathfinder : MonoBehaviour {
 
         ShowColours(graphView, start, goal);
 
-        frontierNodes = new Queue<Node>();
+        frontierNodes = new PriorityQueue<Node>();
         frontierNodes.Enqueue(start);
         exploredNodes = new List<Node>();
         pathNodes = new List<Node>();
@@ -207,6 +207,11 @@ public class Pathfinder : MonoBehaviour {
                     node.neighbours[i].distanceTravelled = newDistanceTravelled;
 
                     node.neighbours[i].previous = node;
+
+                    // This is a hack to make the priority queue behave like a
+                    // regular queue in terms of FIFO
+                    node.neighbours[i].priority = exploredNodes.Count;
+                    
                     frontierNodes.Enqueue(node.neighbours[i]);
                 }
             }
@@ -235,6 +240,7 @@ public class Pathfinder : MonoBehaviour {
 
                     if (!frontierNodes.Contains(node.neighbours[i]))
                     {
+                        node.neighbours[i].priority = (int)node.neighbours[i].distanceTravelled;
                         frontierNodes.Enqueue(node.neighbours[i]);
                     }
                 }
