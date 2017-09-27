@@ -33,7 +33,8 @@ public class Pathfinder : MonoBehaviour {
     {
         BreadthFirst = 0,
         Dijkstra = 1,
-        GreedyBestFirst = 2
+        GreedyBestFirst = 2,
+        AStar = 3
     }
 
     public Mode mode = Mode.BreadthFirst;
@@ -147,6 +148,10 @@ public class Pathfinder : MonoBehaviour {
                 else if (mode == Mode.GreedyBestFirst)
                 {
                     ExpandFrontierGreedyBestFirst(currentNode);
+                }
+                else if (mode == Mode.AStar)
+                {
+                    ExpandFrontierAStar(currentNode);
                 }
 
                 if (frontierNodes.Contains(goalNode))
@@ -274,6 +279,37 @@ public class Pathfinder : MonoBehaviour {
                     if (!frontierNodes.Contains(node.neighbours[i]))
                     {
                         node.neighbours[i].priority = (int)node.neighbours[i].distanceTravelled;
+                        frontierNodes.Enqueue(node.neighbours[i]);
+                    }
+                }
+            }
+        }
+    }
+
+    private void ExpandFrontierAStar(Node node)
+    {
+        if (node != null)
+        {
+            for (int i = 0; i < node.neighbours.Count; i++)
+            {
+                if (!exploredNodes.Contains(node.neighbours[i]))
+                {
+                    float distanceToNeighbor = graph.GetNodeDistance(node, node.neighbours[i]);
+                    float newDistanceTravelled = distanceToNeighbor + node.distanceTravelled + (int)node.nodeType;
+
+                    if (
+                        float.IsPositiveInfinity(node.neighbours[i].distanceTravelled) || 
+                        newDistanceTravelled < node.neighbours[i].distanceTravelled
+                    )
+                    {
+                        node.neighbours[i].previous = node;
+                        node.neighbours[i].distanceTravelled = newDistanceTravelled;
+                    }
+
+                    if (!frontierNodes.Contains(node.neighbours[i]) && graph != null)
+                    {
+                        int distanceToGoal = (int)graph.GetNodeDistance(node.neighbours[i], goalNode);
+                        node.neighbours[i].priority = (int)node.neighbours[i].distanceTravelled + distanceToGoal;
                         frontierNodes.Enqueue(node.neighbours[i]);
                     }
                 }
