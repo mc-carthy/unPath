@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textAsset: {fileID: 4900000, guid: a312893b5d5504beeb28989526458cec, type: 3}
-  textureMap: {fileID: 2800000, guid: 0c660723b0051422aae70e2ed337b24b, type: 3}
+  textureMap: {fileID: 2800000, guid: 9855fae22a85b4e52891966f7cb1b3eb, type: 3}
 --- !u!4 &556353192
 Transform:
   m_ObjectHideFlags: 0
@@ -236,7 +236,11 @@ MonoBehaviour:
   mapData: {fileID: 556353191}
   graph: {fileID: 1285068563}
   pathfinder: {fileID: 1401350815}
-  timestep: 0.05
+  timestep: 0.01
+  startX: 0
+  startY: 3
+  goalX: 62
+  goalY: 20
 --- !u!4 &1328871107
 Transform:
   m_ObjectHideFlags: 0
@@ -277,6 +281,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722503da210d44a63874328feeab80fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showIterations: 1
+  showColours: 1
+  showArrows: 0
+  exitOnComplete: 1
   startColour: {r: 0, g: 1, b: 0, a: 1}
   goalColour: {r: 1, g: 0, b: 0, a: 1}
   frontierColour: {r: 1, g: 0, b: 1, a: 1}
@@ -285,6 +293,7 @@ MonoBehaviour:
   arrowColour: {r: 0.85, g: 0.85, b: 0.85, a: 1}
   highlightColour: {r: 1, g: 1, b: 0.5, a: 1}
   isComplete: 0
+  mode: 1
 --- !u!4 &1401350816
 Transform:
   m_ObjectHideFlags: 0

@@ -9,8 +9,21 @@ public class MapData : MonoBehaviour
     public TextAsset textAsset;
     public Texture2D textureMap;
 
+    public Color32 openColour = Color.white;
+    public Color32 blockedColour = Color.black;
+    public Color32 lightColour = new Color32(124, 194, 78, 255);
+    public Color32 mediumColour = new Color32(252, 255, 52, 255);
+    public Color32 heavyColour = new Color32(255, 129, 12, 255);
+
     private string resourcePath = "Mapdata";
     private int width, height;
+
+    private static Dictionary<Color32, NodeType> terrainLookup = new Dictionary<Color32, NodeType>();
+
+    private void Awake()
+    {
+        SetupDictionary();
+    }
 
     private void Start()
     {
@@ -74,17 +87,17 @@ public class MapData : MonoBehaviour
                 string newLine = "";
                 for (int x = 0; x < texture.width; x++)
                 {
-                    if (texture.GetPixel(x, y) == Color.black)
+                    Color pixelColour = texture.GetPixel(x, y);
+
+                    if (terrainLookup.ContainsKey(pixelColour))
                     {
-                        newLine += "1";
-                    }
-                    else if (texture.GetPixel(x, y) == Color.white)
-                    {
-                        newLine += "0";
+                        NodeType nodeType = terrainLookup[pixelColour];
+                        int nodeTypeNum = (int)nodeType;
+                        newLine += nodeTypeNum;
                     }
                     else
                     {
-                        newLine += " ";
+                        newLine += "0";
                     }
                 }
                 lines.Add(newLine);
@@ -132,5 +145,24 @@ public class MapData : MonoBehaviour
         }
 
         return map;
+    }
+
+    private void SetupDictionary()
+    {
+        terrainLookup.Add(openColour, NodeType.Open);
+        terrainLookup.Add(blockedColour, NodeType.Blocked);
+        terrainLookup.Add(lightColour, NodeType.LightTerrain);
+        terrainLookup.Add(mediumColour, NodeType.MediumTerrain);
+        terrainLookup.Add(heavyColour, NodeType.HeavyTerrain);
+    }
+
+    public static Color GetColourFromNodeType(NodeType nodeType)
+    {
+        if (terrainLookup.ContainsValue(nodeType))
+        {
+            return terrainLookup.FirstOrDefault(x => x.Value == nodeType).Key;
+        }
+
+        return Color.white;
     }
 }
